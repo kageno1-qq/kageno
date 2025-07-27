@@ -118,7 +118,7 @@ input:checked + .slider:before {
     width: 230px;
     height: 570px;
     position: absolute;
-    bottom: 80px;
+    bottom: 70px;
     right: 20px;
     z-index: 999;
     background: var(--btn);
