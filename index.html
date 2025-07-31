@@ -7,7 +7,7 @@
     <title>kageno</title>
 </head>
 <body id="backgroundTarget">
-    <!-- Снеговой канвас -->
+    <!-- Снег -->
     <canvas id="snowCanvas"></canvas>
 
     <!-- Кнопка смены темы -->
@@ -29,10 +29,8 @@
 
     <!-- Модальное окно настроек -->
     <div class="modal" style="display: none;">
-        <!-- Заголовок модального окна -->
         <div class="modal_title">
             <p class="modal_title_text">Вид новой вкладки</p>
-            <div class="modal_close" aria-label="Закрыть"></div>
         </div>
 
         <!-- Переключатель поисковой строки -->
@@ -87,7 +85,7 @@
         <!-- Кнопка сброса фона -->
         <button id="resetBackground" type="button">Удалить фон</button>
 
-        <!-- Цвет фона -->
+        <!-- Цвет -->
         <div class="m">
             <p class="model_text">Цвет фона</p>
             <button id="resetColorBtn" type="button" class="reset-btn">
@@ -104,6 +102,30 @@
         </div>
         <input type="color" id="snowColorPicker" value="#ffffff" />
         
+        <!-- Добавление виджета -->
+        <div class="modal_title">
+            <button id="add_widget_btn">Добавить виджет</button>
+        </div>
+
+        <!-- Убрать крестики -->
+        <div class="modal_title">
+            <p class="model_text">Убрать крестики</p>
+            <label class="switch">
+                <input type="checkbox" id="toggleCloseBtn">
+                <span class="slider round"></span>
+            </label>
+        </div>
+
+        <div class="add_widget">
+            <div class="modal_title">
+                <p class="add_widget_title">Добавить виджет</p>
+                <button id="closeButton">
+                    <img id="close" src="" class="icon_button_16px">
+                </button>
+            </div>
+            <input type="text" id="widget_input" placeholder="Введите URL">
+            <button id="addBtn">Добавить</button>
+        </div>
     </div>
 
     <!-- Контейнер с формой поиска -->
@@ -114,7 +136,7 @@
     </div>
 
     <!-- Виджеты-ссылки -->
-    <div class="widget">
+    <div class="widget" id="widget_container">
         <a href="https://animego.me/" target="_blank">
             <button class="widget_button" type="button">
                 <img id="animego" src="" alt="AnimeGo" class="icon_button_32px">
@@ -147,6 +169,7 @@
         </a>
     </div>
 
+    
     <!-- Скрипты -->
     <script src="access/js/script.js"></script>
 </body>

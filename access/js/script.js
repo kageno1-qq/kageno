@@ -4,6 +4,7 @@ const root = document.documentElement;
 
 const icons = [
     { el: document.getElementById('theme'), light: 'access/icon/theme.dark.png', dark: 'access/icon/theme.light.png' },
+    { el: document.getElementById('close'), light: 'access/icon/close.dark.png', dark: 'access/icon/close.light.png' },
     { el: document.getElementById('animego'), light: 'access/icon/animego.dark.png', dark: 'access/icon/animego.light.png' },
     { el: document.getElementById('remanga'), light: 'access/icon/remanga.dark.png', dark: 'access/icon/remanga.light.png' },
     { el: document.getElementById('youtube'), light: 'access/icon/youtube.dark.png', dark: 'access/icon/youtube.light.png' },
@@ -13,6 +14,7 @@ const icons = [
     { el: document.getElementById('settings_icon'), light: 'access/icon/settings.dark.png', dark: 'access/icon/settings.light.png' },
     { el: document.getElementById('undo'), light: 'access/icon/undo.dark.png', dark: 'access/icon/undo.light.png' },
     { el: document.getElementById('undo_snow'), light: 'access/icon/undo.dark.png', dark: 'access/icon/undo.light.png' },
+
 ];
 
 // Функция для изменения темы и иконок
@@ -389,4 +391,119 @@ function applyLayout(position) {
     }
 }
 
+const add_widget_btn = document.getElementById('add_widget_btn');
+const add_widget = document.querySelector('.add_widget');
+const closeButton = document.getElementById("closeButton");
+
+add_widget_btn.addEventListener('click', () => {
+    add_widget.style.display = add_widget.style.display === 'flex' ? 'none' : 'flex';
+});
+
+closeButton.addEventListener('click', () => {
+    add_widget.style.display = 'none';
+});
+
+const addWidgetBtn = document.getElementById('addBtn');
+const input = document.getElementById('widget_input');
+const widgetContainer = document.getElementById('widget_container');
+
+document.addEventListener('DOMContentLoaded', loadWidgets);
+
+function loadWidgets() {
+    const savedWidgets = JSON.parse(localStorage.getItem('widgets')) || [];
+
+    savedWidgets.forEach(url => {
+        createWidget(url);
+    });
+}
+
+// Добавление виджета
+addWidgetBtn.addEventListener('click', () => {
+    const url = input.value.trim();
+    if (!url) return;
+
+    createWidget(url);
+
+    saveWidget(url);
+
+    input.value = '';
+    overlay.style.display = 'none';
+});
+
+// Создание виджета
+function createWidget(url) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'widget_wrapper';
+
+    const closeBtn = document.createElement('span');
+    closeBtn.className = 'close_btn';
+    closeBtn.textContent = 'x';
+
+    closeBtn.addEventListener('click', () => {
+        wrapper.remove();
+        removeWidget(url);
+    });
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.target = '_blank';
+
+    const button = document.createElement('button');
+    button.className = 'widget_button';
+    button.type = 'button';
+
+    const img = document.createElement('img');
+    img.src = `https://www.google.com/s2/favicons?domain=${new URL(url).hostname}`;
+    img.className = 'icon_button_32px';
+
+    button.appendChild(img);
+    a.appendChild(button);
+
+    wrapper.appendChild(closeBtn);
+    wrapper.appendChild(a);
+    widgetContainer.appendChild(wrapper);
+
+    toggleWidgetCloseBtnVisibility();
+}
+
+function saveWidget(url) {
+    const savedWidgets = JSON.parse(localStorage.getItem('widgets')) || [];
+    savedWidgets.push(url);
+    localStorage.setItem('widgets', JSON.stringify(savedWidgets));
+}
+
+function removeWidget(url) {
+    let savedWidgets = JSON.parse(localStorage.getItem('widgets')) || [];
+    savedWidgets = savedWidgets.filter(item => item !== url);
+    localStorage.setItem('widgets', JSON.stringify(savedWidgets));
+}
+
+function toggleWidgetCloseBtnVisibility() {
+    const allCloseBtns = document.querySelectorAll('.close_btn');
+    const toggleCloseBtn = document.getElementById('toggleCloseBtn');
+
+    if (toggleCloseBtn.checked) {
+        allCloseBtns.forEach(btn => {
+            btn.style.display = 'none';
+        });
+    } else {
+        allCloseBtns.forEach(btn => {
+            btn.style.display = '';
+        });
+    }
+}
+
+document.getElementById('toggleCloseBtn').addEventListener('change', () => {
+    const isChecked = document.getElementById('toggleCloseBtn').checked;
+    localStorage.setItem('toggleCloseBtnState', isChecked);
+    toggleWidgetCloseBtnVisibility();
+});
+
+window.addEventListener('load', () => {
+    const savedState = localStorage.getItem('toggleCloseBtnState') === 'true'; 
+    const toggleCloseBtn = document.getElementById('toggleCloseBtn');
+    toggleCloseBtn.checked = savedState || false;
+
+    toggleWidgetCloseBtnVisibility();
+});
 
